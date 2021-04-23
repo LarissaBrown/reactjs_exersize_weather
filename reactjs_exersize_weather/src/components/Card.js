@@ -1,24 +1,33 @@
-import React from 'react' 
-
+import React, {useContext, useEffect} from 'react' 
+import {StoreContext} from "../context/StoreProvider"
 
 
 
 export default function Card(props){
+   
 
-   const {
-        date,    
-        fahrenheit,
-        celcius,
-        tempChecked,
-        description
-    }=props
+  const {handleBargraph} = useContext(StoreContext)
+  const {
+    date,    
+    fahrenheit,
+    celcius,
+    tempChecked,
+    description,
+    item,
+    i
+}=props
+  
+ console.log("item", i)
+
+
+
 
     return (
 
     <>
    
         
-        <div   className="react-multi-carousel-item "  >
+        <div  className="overlay-card"  >
             <h3>{description}</h3>
             {tempChecked
             ?
@@ -34,6 +43,7 @@ export default function Card(props){
             } 
             <h4>Date:</h4>
             <p>{date}</p>
+            <button onClick={()=> handleBargraph(i)} >View Data</button>
 
         </div>
         

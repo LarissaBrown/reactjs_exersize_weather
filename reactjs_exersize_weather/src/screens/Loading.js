@@ -1,52 +1,34 @@
-// The loading screen is the first screen that is shown and here 
-//the weather data will be loaded from OpenWeatherMap at: https:// openweathermap.org/.
-// You can use our OpenWeatherMap APPID to obtain weather information.  
-//The URL provided below returns weather info 
-//for a total of 5 days and each day contains a  maximum of 8 weather segments (3 hours). 
-// Example request with our APPID: 
-// http://api.openweathermap.org/data/2.5/forecast?q=Munich,de&APPID=75f972b80e26f14fe6c920aa6a85ad57&cnt=40 
-
-import React , {useEffect,useState} from 'react'
+import React , {useEffect,useState, useContext} from 'react'
 import spin from './spin.svg'
 import WeatherInfo from './WeatherInfo'
-import axios from 'axios'
+
+import {StoreContext} from "../context/StoreProvider"
 
 
 
 
-export default function Loading(){
+
+export default function Loading(props){
     
-    const [weatherData, setWeatherData] = useState([])
     const [isHidden, setIsHidden] = useState(true)
-  
-
+    const {weatherData, setWeatherData} = useContext(StoreContext)
 
 
     useEffect(()=> {
-    
-       axios.get("http://api.openweathermap.org/data/2.5/forecast?q=Munich,de&APPID=75f972b80e26f14fe6c920aa6a85ad57&cnt=40")
-       .then(response => {
+        console.log("First Page")
+        weatherData !== []
+        &&
+        setIsHidden(false? true : false)
 
-
-            setWeatherData(response.data.list)
-            console.log(weatherData)
-       
-       })
-        .catch(err => console.error(err))
-
-
-        setIsHidden(false)
-       
-    return
-
-}, [weatherData])
+    }, []
+    )
        
         
-
+        console.log("apiWeatherData",weatherData)
 
         
  return(
-     <>
+    <>
     {
      isHidden
         ?
@@ -71,7 +53,7 @@ export default function Loading(){
  
         :
         
-        <WeatherInfo weatherData={weatherData}/>
+        <WeatherInfo weatherData={weatherData} setWeatherData={setWeatherData}/>
     }
     </>
  )  
