@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react' 
+import React, {useContext} from 'react' 
 import {StoreContext} from "../context/StoreProvider"
 
 
@@ -13,11 +13,9 @@ export default function Card(props){
     celcius,
     tempChecked,
     description,
-    item,
     i
-}=props
-  
- console.log("item", i)
+    }=props
+ 
 
 
 
@@ -27,7 +25,7 @@ export default function Card(props){
     <>
    
         
-        <div  className="overlay-card"  >
+        <div  className="react-multi-carousel-item"  >
             <h3>{description}</h3>
             {tempChecked
             ?

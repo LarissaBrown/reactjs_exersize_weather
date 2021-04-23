@@ -7,18 +7,19 @@
 //
 // Weather Cards 
 // Below the arrows, a maximum of 3 weather cards are visible and they are laid out horizontally. Each card displays the weather  forecast for one day and must at least show the average temperature and date for that day.
-import React , {useState, useEffect} from 'react' 
+import React , {useContext} from 'react' 
 import Barchart from '../components/Barchart.js'
 import CardCarousel from '../components/CardCarousel.js'
-
+import {StoreContext} from '../context/StoreProvider'
 
 
 
 
 export default function WeatherInfo(props){
-    const [tempChecked, setTempChecked] = useState(true)
-    const {weatherData, setWeatherData} = props
-    let dayData  = []
+    const {tempChecked, setTempChecked} = useContext(StoreContext)
+    console.log("tempChecked",tempChecked)
+    const {weatherData} = props
+
 
     // useEffect(() =>{
    
@@ -43,6 +44,7 @@ export default function WeatherInfo(props){
 
            
             <div className="radio">
+              
                 <label>
                     <input type="radio" value="fahrenheit" checked={tempChecked} onChange={handleKelvin}/>
                 Fahrenheit
@@ -53,12 +55,13 @@ export default function WeatherInfo(props){
                     <input type="radio" value="celcius" checked={!tempChecked} onChange={handleKelvin}/>
                 Celcius
                 </label>
+               
             </div>
         </form>
 
-        <CardCarousel dayData={dayData} tempChecked={tempChecked} handleKelvin={handleKelvin} weatherData={weatherData}/>
+        <CardCarousel weatherData={weatherData}/>
 
-        <Barchart dayData={dayData} tempChecked={tempChecked} handleKelvin={handleKelvin} weatherData={weatherData}/>
+        <Barchart weatherData={weatherData}/>
 
 
         </div>

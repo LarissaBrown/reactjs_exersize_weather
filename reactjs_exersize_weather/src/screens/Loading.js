@@ -11,16 +11,16 @@ import {StoreContext} from "../context/StoreProvider"
 export default function Loading(props){
     
     const [isHidden, setIsHidden] = useState(true)
-    const {weatherData, setWeatherData} = useContext(StoreContext)
+    const {weatherData, setWeatherData, setFiveDayData, fiveDayData} = useContext(StoreContext)
 
 
     useEffect(()=> {
         console.log("First Page")
-        weatherData !== []
-        &&
+     
         setIsHidden(false? true : false)
+        setFiveDayData(fiveDayData)
 
-    }, []
+    }, [fiveDayData, setFiveDayData]
     )
        
         
@@ -50,10 +50,12 @@ export default function Loading(props){
                 </p>
                
         </div>
- 
+    
         :
-        
+        <>
+        {console.log("loadingWeatherInfo")}
         <WeatherInfo weatherData={weatherData} setWeatherData={setWeatherData}/>
+        </>
     }
     </>
  )  

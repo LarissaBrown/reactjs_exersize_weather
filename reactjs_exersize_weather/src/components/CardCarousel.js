@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React from 'react'
 import {v4} from 'uuid'
 import Card from './Card'
 import Carousel from 'react-multi-carousel'
@@ -8,13 +8,17 @@ import Carousel from 'react-multi-carousel'
 
 export default function CardCarousel(props){
 
-   const {weatherData, handleKelvin, tempChecked} = props
+   const {weatherData} = props
 
 
     return (
 
 
     <Carousel 
+      showDots={true}
+      sliderClass=""
+      slidesToSlide={0}
+      swipeable
       additionalTransfrom={0}
       arrows
       autoPlaySpeed={3000}
@@ -55,15 +59,12 @@ export default function CardCarousel(props){
             partialVisibilityGutter: 30
           }
         }}
-        showDots={true}
-        sliderClass=""
-        slidesToSlide={0}
-        swipeable
+
   
         >
   
 
-      {console.log("cardCarousel",weatherData)}
+      {console.log("cardCarousel")}
              {weatherData.map((item, index) => 
         
                <Card 
@@ -72,9 +73,7 @@ export default function CardCarousel(props){
                   celcius={Math.floor(item.main.temp - 273.15)} 
                   fahrenheit={Math.floor((item.main.temp - 273.15)* 9/5 + 32)} 
                   key={v4()}
-                  tempChecked={tempChecked}
                   weatherData={weatherData}
-                  handleKelvin={handleKelvin}
                   item = {item}
                   i ={index}
                             />

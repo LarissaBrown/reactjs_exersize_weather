@@ -6,13 +6,14 @@ export const StoreContext = React.createContext()
 
 
 
-export default function StoreProvider(props){
+function StoreProvider(props){
   
 
-
+const [tempChecked, setTempChecked] = useState(true)
 const [weatherData, setWeatherData] = useState([])
 const [fiveDayData, setFiveDayData] = useState([])
-const [arr, setArr] = useState([])
+
+const [arrTimes, setArrTimes] = useState([])
 
 useEffect(()=> {
     axios.get("http://api.openweathermap.org/data/2.5/forecast?q=Munich,de&APPID=75f972b80e26f14fe6c920aa6a85ad57&cnt=40")
@@ -23,40 +24,35 @@ useEffect(()=> {
 
     })
     .catch(err => console.error(err))
-
+console.log("axios call")
         return 
 }, [setWeatherData])
 
 
-useEffect(()=>{
-    setArr([])
-}, [setArr])
 
 
 const handleBargraph = (i)=> {
 
     weatherData.map((cardItem, index)=> {
 
-        if(i === index ){
-            console.log(i)
-            console.log(index)
-            arr.push(cardItem)
-        } 
-        else if (index < i+8 ){
-            console.log(i)
-            console.log(index)
-            arr.push(cardItem)
+        if(i === index || index < i+7){
 
-        }else if(arr[7]){
-
-            return
+            setArrTimes(arrTimes.push(cardItem))
         }
-       }) 
-       console.log("arrItem", arr)
-       setFiveDayData(arr)
-       console.log("fiveDayDataAfterClick",fiveDayData)
-     return
-}
+        if(arrTimes.length === 8){
+        setFiveDayData(arrTimes)
+
+        }
+        setArrTimes([])
+        return arrTimes
+        
+    })
+       
+    return fiveDayData
+    }
+
+
+
 
 
  return(
@@ -66,10 +62,11 @@ const handleBargraph = (i)=> {
        setWeatherData,
        setFiveDayData,
        fiveDayData,
-       handleBargraph
-     
-        
-      
+       handleBargraph,
+       tempChecked, 
+       setTempChecked,
+    
+
     }}>
     {props.children }
     </StoreContext.Provider>
@@ -79,6 +76,7 @@ const handleBargraph = (i)=> {
 
 
 }
+export {StoreProvider}
 
 
 //testData for fiveDayData
