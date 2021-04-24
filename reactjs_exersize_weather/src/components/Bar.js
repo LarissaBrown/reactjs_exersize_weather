@@ -1,4 +1,4 @@
-import React, {useContext} from 'react'
+import React from 'react'
 
 // import {StoreContext}from "../context/StoreProvider"
 
@@ -7,13 +7,16 @@ import React, {useContext} from 'react'
 export default function Bar(props){
   
     
-     const {tempChecked, celcius,color,fahrenheit, timeDisplay} = props
+     const {tempChecked, celcius,height,fahrenheit, timeDisplay} = props
+
+     console.log("barHeight", `"${height+200}px"`)
     
 
 
     return(
-        <div  className="bar" style={{backgroundColor: `${color}`}}>
-            <div className="bar" >
+        <div  className="outer-bar" 
+            style={{height: `"${parseInt(height)}px"` , backgroundColor: "white"}}>
+            <div className="bar" style={{ backgroundColor: "pink"}}>
                 {tempChecked? <p>Temp: {celcius}C</p> : <p>Temp: {fahrenheit}C</p>}
                 <p>Time: {timeDisplay}</p>
             </div>
