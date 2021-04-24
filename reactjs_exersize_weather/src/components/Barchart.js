@@ -27,45 +27,56 @@ const {tempChecked} = props
             // const analog = analogTimeDisplay(time)
            let time= day.dt_txt.split(" ")[1]
            let timeArr = time.split('').splice(0, 5)
-           timeArr[0] == 0 && timeArr.shift()
-
-            if(timeArr === `0:00`){
-                    timeArr = '12:00'
-                } else if(timeArr === `15:00`){
-                    timeArr = '3:00'
-                }else if(timeArr === '18:00'){
-                    timeArr = '6:00'
-                }else if(timeArr === '21:00'){
-                    timeArr ='9:00'
-                }
-
-                if(timeArr === '0:00'||'3:00'||'6:00'||'9:00'){
-                    timeArr = timeArr +"AM" 
-                       }
+           timeArr[0] === 0 && timeArr.shift();
        
-                  else {
-                           timeArr = timeArr+'PM'
-                       } 
-                timeArr = timeArr.split(',')
+           
+           timeArr=timeArr.join('')
+           timeArr =timeArr.split(" ")
+         
+
+            console.log("timehalf", timeArr)
+            if(timeArr[0] === `00:00`){
+                    timeArr[0] = `12:00AM`
+                } else if(timeArr[0] === '12:00'){
+                    timeArr[0] = `12:00PM`
+                }else if(timeArr[0] === `15:00`){
+                    timeArr[0] = `3:00PM`
+                }else if(timeArr[0] === '18:00'){
+                    timeArr[0] = `6:00PM`
+                }else if(timeArr[0] === '21:00'){
+                    timeArr[0]=`9:00PM`
+                } else {
+                    timeArr[0]=timeArr[0].split('').splice(1).join('')+'AM'
+               
+                } 
+                   
+
+                const temp = day.main.temp
+                console.log("temp", temp)
+                const height = [`${temp/400}`]
+                let wholeNum = height[0].split('.')
+                wholeNum = wholeNum[1].split('').splice(0,2).join('')
 
         return(
-          
+            
         <Bar           
             celcius={Math.floor(day.main.temp - 273.15)} 
             fahrenheit={Math.floor((day.main.temp - 273.15)* 9/5 + 32)} 
             key={v4()}
-            temp={day.main.temp }
+            temp={temp}
             tempChecked={!tempChecked}
-            color={"pink"}
-           
+            height = {wholeNum}
             timeDisplay={timeArr}
             description={day.weather.description}
         /> 
         )
+      
+
         }
                       
         )
         }
+        
     </div>    
     )
     }
