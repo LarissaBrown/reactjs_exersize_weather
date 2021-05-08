@@ -1,38 +1,41 @@
-import React, { useEffect } from "react";
+import React, {useEffect} from "react";
 import CarouselSlideItem from "./CarouselSlideItem";
 import { connect } from "react-redux";
 // import { getItemsByVisibilityFilter , getItems} from "../redux/reducers/selectors";
 // import { VISIBILITY_FILTERS } from "../constants";
-import { useSelector, useDispatch } from "react-redux";
-import { getPlayers } from "../redux/actions";
+import { useDispatch } from "react-redux";
+import { loadData } from "../redux/actions";
+import {
+  makeSelectCurrentWeather,
+  makeSelectFiveDayData,
+  makeSelect_Players,
+} from "../redux/selectors"
+
 
 
 const Carousel = () => {
-  const dispatch = useDispatch();
-  const _localItems = useSelector((state) => state._localItems);
-  const fiveDayData = useSelector((state) => state.fiveDayData);
-  const weather = useSelector((state) => state.weather);
-  const isLoaded = useSelector((state) => state.isLoaded)
 
   const slideWidth = 30;
 
-  console.log("weather", weather);
-  console.log("fiveDayData", fiveDayData);
+  const weather = makeSelectCurrentWeather(state => state.weather)
+  const fiveDayData = makeSelectFiveDayData(state => state.fiveDayData)
+  const _players = makeSelect_Players(state => state._players)
+ 
+  const dispatch = useDispatch()
 
-  useEffect(() => {
 
-    isLoaded && dispatch(getPlayers())
-   
+useEffect(() => {
 
-   
+ dispatch(loadData(_players, weather, fiveDayData))
 
-  }, [dispatch, isLoaded]);
+}, [_players, dispatch, weather, fiveDayData])
 
-  console.log("_localItems", _localItems)
+
   
 
-  const length = _localItems.length;
-  _localItems.push(..._localItems);
+
+  const length = _players.length;
+  _players.push(..._players);
 
   const sleep = (ms = 0) => {
     return new Promise((resolve) => setTimeout(resolve, ms));
@@ -40,12 +43,12 @@ const Carousel = () => {
 
   const createLocalItem = (pos, i) => {
     let idx = i;
-    console.log("idxPLAYER", _localItems[idx]);
+    console.log("idxPLAYER", _players[idx]);
     const localItem = {
       styles: {
         transform: `translateX(${pos * slideWidth}rem)`,
       },
-      player: _localItems[idx].player,
+      player: _players[idx].player,
     };
 
     switch (pos) {
@@ -63,7 +66,7 @@ const Carousel = () => {
     return localItem;
   };
 
-  const keys = Array.from(Array(_localItems.length).keys());
+  const keys = Array.from(Array(_players.length).keys());
 
   const [localItems, setlocalItems] = React.useState(keys);
   const [isTicking, setIsTicking] = React.useState(false);
@@ -98,11 +101,11 @@ const Carousel = () => {
     else if (i > activeIdx) nextClick(i - activeIdx);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (isTicking) sleep(300).then(() => setIsTicking(false));
   }, [isTicking]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setActiveIdx((length - (localItems[0] % length)) % length) // prettier-ignore
   }, [localItems, length]);
 
@@ -162,12 +165,15 @@ const Carousel = () => {
 };
 
 const mapStateToProps = function(state) {
+ 
+  const {weather, loading, fiveDayData, _players} = state
   return {
-    weather: state.weather,
-    _localItems: state._localItems,
-    fiveDayData: state.fiveDayData,
-    isLoaded: state.isLoaded
+    weather: weather,
+   loading: loading,
+    fiveDayData: fiveDayData,
+    _players: _players
   }
 }
+
 export default connect(mapStateToProps)
   (Carousel)

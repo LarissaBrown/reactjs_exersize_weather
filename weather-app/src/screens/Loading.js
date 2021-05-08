@@ -2,38 +2,58 @@ import React, { useEffect } from "react";
 import spin from "./spin.svg";
 import WeatherInfo from "./WeatherInfo";
 // import Bargraph from "../components/Bargraph";
+import { connect } from 'react-redux'
 import Carousel from "../components/Carousel";
 import Grid from "@material-ui/core/Grid";
-import { connect } from "react-redux";
-// import { getLoadWeatherByVisibilityFilter , getLoadWeather} from "../redux/reducers/selectors";
-// import { VISIBILITY_FILTERS } from "../constants";
-import { useSelector, useDispatch } from "react-redux";
-import { getWeather } from "../redux/actions";
+import { useDispatch } from 'react-redux';
+import { loadData } from '../redux/actions'
+import {
+  makeSelectCurrentWeather,
+  makeSelectFiveDayData,
+  makeSelectLoading,
+  makeSelect_Players,
+} from "../redux/selectors"
+
+
+
+
+
 
 
 function Loading() {
-  // const weather = useSelector((state) => state.weather);
-  const isLoaded = useSelector((state) => state.isLoaded);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-
-   dispatch(getWeather())
   
+  const weather = makeSelectCurrentWeather(state => state.weather)
+  const fiveDayData = makeSelectFiveDayData(state => state.fiveDayData)
+  const _players = makeSelect_Players(state => state._players)
+  const loading = makeSelectLoading(state => state.loading)
+
+  const dispatch = useDispatch()
+ 
+  useEffect(() => {
+   
+    loading && dispatch(loadData(weather, loading ));
       
-  }, [dispatch]);
+    
+      
+  }, [loading, weather, dispatch]);
 
 
  
   return (
     <>
-      {!isLoaded? (
+  
+      {!loading
+      ? 
+      (
         <Grid>
           <p style={{ color: "white", fontSize: "7vw" }}>Weather App</p>
           <img src={spin} alt="spin" className="App-spin" />
           <p style={{ color: "white", fontSize: "4vw" }}>Loading ...</p>
         </Grid>
-      ) : (
+      ) 
+      : 
+      (
+        
         <Grid
           container
           style={{
@@ -42,18 +62,19 @@ function Loading() {
             height: "100%",
           }}
         >
+         
           <Grid container style={{ position: "relative", height: "auto" }}>
             
             <WeatherInfo />
           </Grid>
 
-          <Carousel />
+          <Carousel /> 
 
-          {/* <Grid
+          <Grid
             container
             style={{ position: "relative", height: "100px" }}
           ></Grid>
-          <Grid container style={{ position: "relative", height: "auto" }}>
+          {/* <Grid container style={{ position: "relative", height: "auto" }}>
             <Bargraph />
           </Grid> */}
         </Grid>
@@ -62,11 +83,21 @@ function Loading() {
   );
 }
 
-// const weather = useSelector(state => state.weather)
-// // const _localItems = useSelector(state => state._localItems)
-// const loaded = useSelector(state => state.isLoaded)
-// const fiveDayData = useSelector(state => state.fiveDayData)
-// const eightTimes = useSelector(state => state.eightTimesData)
+const mapStateToProps = function(state) {
+  
+  return {
+    loading: state.loading,
+
+  }
+}
+export default connect(mapStateToProps)
+  (Loading)
+
+// const weather = selectGlobal(state => state.weather)
+// // const _localItems = selectGlobal(state => state._localItems)
+// const loaded = selectGlobal(state => state.isLoaded)
+// const fiveDayData = selectGlobal(state => state.fiveDayData)
+// const eightTimes = selectGlobal(state => state.eightTimesData)
 
 // const dispatch = useDispatch()
 
@@ -86,11 +117,5 @@ function Loading() {
 
 // }, [dispatch, fiveDayData, weather]
 // )
-const mapStateToProps = function(state) {
-  return {
-    weather: state.weather,
-    isLoaded: state.isLoaded
-  }
-}
-export default connect(mapStateToProps)
-  (Loading)
+
+

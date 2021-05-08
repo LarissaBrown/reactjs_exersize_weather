@@ -7,9 +7,9 @@ import { Provider } from 'react-redux';
 import * as serviceWorker from './serviceWorker';
 
 
+
 const rootElement =  document.getElementById('root')
-store.dispatch({ type: '_localItems/_localItemAdded', payload: 'God help me!' })
-console.log('Initial State: ', store.getState())
+console.log('Initial State Index: ', store.getState(global))
 
 ReactDOM.render(
   <React.StrictMode>

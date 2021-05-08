@@ -1,27 +1,23 @@
-import React, {useEffect} from "react";
+import React from "react";
+// , {useEffect} 
 import TempToggle from "../components/TempToggle";
 import Grid from '@material-ui/core/Grid';
-import { useSelector, useDispatch } from "react-redux";
-import { fetchFiveDayData } from "../redux/actions";
+// import { useSelector, useDispatch } from "react-redux";
+// import { fetchFiveDayData } from "../redux/actions";
 import { connect } from "react-redux";
 
+const mapStateToProps = function(state) {
+  const {weather, isLoaded, fiveDayData} = state
+  return {
+    weather: weather,
+    isLoaded: isLoaded,
+    fiveDayData: fiveDayData
+  }
+}
 
 
 function WeatherInfo() {
-  const dispatch = useDispatch();
-
-  // const weather = useSelector((state) => state.weather);
-  const fiveDayData = useSelector((state) => state.fiveDayData)
-  const isLoaded = useSelector((state) => state.isLoaded)
-
-  useEffect(() => {
-    
-    isLoaded && dispatch(fetchFiveDayData())
-   
-  }, [isLoaded, dispatch]);
-
-  console.log("fetchFiveDayData", fiveDayData)
-
+ 
   return (
     <React.Fragment>
    
@@ -40,11 +36,7 @@ function WeatherInfo() {
     </React.Fragment>
   );
 }
-const mapStateToProps = function(state) {
-  return {
-    weather: state.weather,
-    fiveDayData: state.fiveDayData
-  }
-}
+
+
 export default connect(mapStateToProps)
   (WeatherInfo)
